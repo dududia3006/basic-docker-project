@@ -1,0 +1,15 @@
+# Utiliser l'image Python officielle
+FROM python:3.9-slim
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le fichier server.py dans le conteneur
+COPY server.py /app/
+
+# Exposer le port 8000
+EXPOSE 8000
+
+# Lancer le serveur Python lorsqu'on démarre le conteneur
+CMD ["python3", "server.py"]
+
