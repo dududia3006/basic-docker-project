@@ -1,0 +1,37 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main  # Déclenche le pipeline à chaque push sur la branche principale
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Récupérer le code source
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Étape 2 : Se connecter à DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Étape 3 : Construire l'image Docker
+      - name: Build Docker image
+        run: docker build -t dududia921/minimal-http-server:latest .
+
+      # Étape 4 : Tagger l'image avec la version (optionnel)
+      - name: Tag Docker image
+        run: |
+          docker tag dududia921/minimal-http-server:latest dududia921/minimal-http-server:v1.0
+
+      # Étape 5 : Pousser l'image vers DockerHub
+      - name: Push Docker image
+        run: |
+          docker push dududia921/minimal-http-server:latest
+          docker push dududia921/minimal-http-server:v1.0
